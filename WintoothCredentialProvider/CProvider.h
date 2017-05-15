@@ -44,21 +44,13 @@ public:
 
 	STDMETHOD(QueryInterface)(REFIID riid, void** ppv)
 	{
-		HRESULT hr;
-		if (IID_IUnknown == riid ||
-			IID_ICredentialProvider == riid ||
-			IID_ICredentialProviderSetUserArray == riid)
+		static const QITAB qit[] =
 		{
-			*ppv = this;
-			reinterpret_cast<IUnknown*>(*ppv)->AddRef();
-			hr = S_OK;
-		}
-		else
-		{
-			*ppv = NULL;
-			hr = E_NOINTERFACE;
-		}
-		return hr;
+			QITABENT(CProvider, ICredentialProvider), // IID_ICredentialProvider
+			QITABENT(CProvider, ICredentialProviderSetUserArray),// IID_ICredentialProviderSetUserArray Add
+			{ 0 },
+		};
+		return QISearch(this, qit, riid, ppv);
 	}
 
 public:
@@ -92,6 +84,7 @@ protected:
 public:
 	CCredential           *_pCredential;          // Our "connected" credential.
 	ICredentialProviderUserArray   *_pCredProviderUserArray;
+	bool ifget = false;
 
 private:
 	CCommandWindow              *_pCommandWindow;       // Emulates external events.

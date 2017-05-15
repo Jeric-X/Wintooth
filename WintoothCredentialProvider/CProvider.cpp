@@ -278,8 +278,8 @@ HRESULT CProvider::GetCredentialCount(
 {
 	*pdwCount = 1;
 	*pdwDefault = 0;
-	//*pbAutoLogonWithDefault = FALSE;
-	*pbAutoLogonWithDefault = TRUE;
+	*pbAutoLogonWithDefault = FALSE;
+	//*pbAutoLogonWithDefault = TRUE;
 	return S_OK;
 }
 

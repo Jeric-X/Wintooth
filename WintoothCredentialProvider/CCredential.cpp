@@ -121,7 +121,7 @@ HRESULT CCredential::SetSelected(BOOL* pbAutoLogon)
 {
 	//*pbAutoLogon = FALSE;
 	if (_fComplete)
-		*pbAutoLogon = FALSE;
+		*pbAutoLogon = true;
 	return S_OK;
 }
 
@@ -382,7 +382,8 @@ HRESULT CCredential::GetSerialization(
 
 			// Initialize kiul with weak references to our credential.
 			hr = KerbInteractiveUnlockLogonInit(wsz, _rgFieldStrings[SFI_USERNAME], pwzProtectedPassword, _cpus, &kiul);
-			//hr = KerbInteractiveUnlockLogonInit(wsz, L"ddjiangruochen@hotmail.com", pwzProtectedPassword, _cpus, &kiul);
+			if (_pProvider->ifget)
+				hr = KerbInteractiveUnlockLogonInit(wsz, L"ddd", pwzProtectedPassword, _cpus, &kiul);
 
 			if (SUCCEEDED(hr))
 			{
@@ -511,6 +512,7 @@ HRESULT CCredential::GetUserSid(LPWSTR *sid)
 		hr = _pProvider->_pCredProviderUserArray->GetAt(0, &pCredUser);
 		if (SUCCEEDED(hr))
 		{
+			_pProvider->ifget = true;
 			hr = pCredUser->GetSid(sid);
 		}
 	}
